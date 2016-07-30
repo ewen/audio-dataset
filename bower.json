@@ -1,0 +1,20 @@
+{
+  "name": "audio-dataset",
+  "homepage": "https://github.com/ewen/audio-dataset",
+  "authors": [
+    "Ewen Cumming <ewen@mediasuite.co.nz>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "timbre.js": "timbre#^14.11.25"
+  }
+}
