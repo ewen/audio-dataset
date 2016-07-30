@@ -15,7 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "timbre.js": "timbre#^14.11.25",
-    "jquery": "^3.1.0"
+    "timbre.js": "timbre#^14.11.25"
   }
 }

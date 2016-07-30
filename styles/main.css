@@ -1,0 +1,22 @@
+body {
+  background-image: url("../images/sprinkles.png");
+  background-repeat: "repeat";
+  font-family: 'Marck Script', cursive;
+}
+
+#title {
+  font-size: 24px;
+  color: #301800;
+  margin-top: 50px;
+}
+
+#date {
+  font-size: 18px;
+  color: #301800;
+  margin-bottom: 50px;
+}
+
+#picture {
+  border: 5px solid white;
+  outline: 1px solid #DEB887;
+}

@@ -3,23 +3,35 @@ var moment = require('moment');
 var player = require('./player');
 var records = require('../data/records.json').search.results
 
-records.length
-
 var i = 0
 
 var iteration = function (gap) {
   setTimeout(function () {
     var record = records[i]
-    var note = (record.description.length % 8) + 1
-    player.playNote(note)
-    $('#record_num').text(record.id)
+    var year = moment(record.display_date).year()
+    var notes = [
+      (record.description.length % 8) + 1,
+      (parseInt(year, 10) % 8) + 1,
+      (record.title.length % 8) + 1,
+      (record.id % 8) + 1,
+      1
+    ]
+
+    var j = 0
+    notes.forEach(function (note) {
+      setTimeout(function () {
+        console.log(note ? note : 1)
+        player.playNote(note ? note : 1)
+      }, 750 * j)
+      j++
+    })
+
     $('#title').text(record.title)
-    var date = moment(record.date)
-    $('#date').text(date.isValid() ? date.format('DD/MM/YYYY') : 'Unknown')
+    $('#date').text(record.display_date)
     $("#picture").attr("src", "http://150.242.42.192:3001/api/image/" + record.id);
     i += 1
     if (i >= records.length) return
-    iteration(2000)
+    iteration(10000)
   }, gap)
 }
 

@@ -16667,23 +16667,35 @@ var moment = require('moment');
 var player = require('./player');
 var records = require('../data/records.json').search.results
 
-records.length
-
 var i = 0
 
 var iteration = function (gap) {
   setTimeout(function () {
     var record = records[i]
-    var note = (record.description.length % 8) + 1
-    player.playNote(note)
-    $('#record_num').text(record.id)
+    var year = moment(record.display_date).year()
+    var notes = [
+      (record.description.length % 8) + 1,
+      (parseInt(year, 10) % 8) + 1,
+      (record.title.length % 8) + 1,
+      (record.id % 8) + 1,
+      1
+    ]
+
+    var j = 0
+    notes.forEach(function (note) {
+      setTimeout(function () {
+        console.log(note ? note : 1)
+        player.playNote(note ? note : 1)
+      }, 750 * j)
+      j++
+    })
+
     $('#title').text(record.title)
-    var date = moment(record.date)
-    $('#date').text(date.isValid() ? date.format('DD/MM/YYYY') : 'Unknown')
+    $('#date').text(record.display_date)
     $("#picture").attr("src", "http://150.242.42.192:3001/api/image/" + record.id);
     i += 1
     if (i >= records.length) return
-    iteration(2000)
+    iteration(10000)
   }, gap)
 }
 
@@ -16736,24 +16748,60 @@ iteration(0)
 },{"../data/records.json":1,"./player":5,"jquery":2,"moment":3}],5:[function(require,module,exports){
 
 // major scale
-var freqs = [
-  130.8127826502993,
-  146.8323839587038,
-  164.81377845643496,
-  174.61411571650194,
-  195.99771799087463,
-  220,
-  246.94165062806206,
-  261.6255653005986
+// var freqs = [
+//   130.8127826502993,
+//   146.8323839587038,
+//   164.81377845643496,
+//   174.61411571650194,
+//   195.99771799087463,
+//   220,
+//   246.94165062806206,
+//   261.6255653005986
+// ];
+
+// var synth = T("OscGen", {wave:"saw", mul:0.25}).play();
+
+var pattern = new sc.Pshuf(sc.series(12), Infinity);
+var scale   = new sc.Scale.major();
+var chords  = [
+  [0, 1, 4], [0, 1, 5], [0, 1, 6],
+  [0, 2, 6], [0, 2, 5], [0, 2, 4],
+  [0, 3, 6], [0, 3, 5], [0, 3, 4]
 ];
 
-var synth = T("OscGen", {wave:"saw", mul:0.25}).play();
+var msec = timbre.timevalue("BPM120 L16");
+var osc  = T("saw");
+var env  = T("env", {table:[0.2, [1, msec * 48], [0.2, msec * 16]]});
+var gen  = T("OscGen", {osc:osc, env:env, mul:0.5});
+
+var pan   = T("pan", gen);
+var synth = pan;
+
+synth = T("+saw", {freq:(msec * 2)+"ms", add:0.5, mul:0.85}, synth);
+synth = T("lpf" , {cutoff:800, Q:12}, synth);
+synth = T("reverb", {room:0.95, damp:0.1, mix:0.75}, synth);
+
+T("interval", {interval:msec * 64}, function() {
+  var root = pattern.next();
+  chords.choose().forEach(function(i) {
+    gen.noteOn(scale.wrapAt(root + i) +60, 80);
+  });
+  pan.pos.value = Math.random() * 2 - 1;
+}).set({buddies:synth}).start();
+
+var getFreq = function (n) {
+
+}
 
 module.exports = {
   // play note in the major scale
-  playNote: function (n) {
-    if (n < 0 || n > 8) throw new Error('Note out of bounds of the major scale');
-    synth.noteOnWithFreq(freqs[n - 1], 100);
+  playNote: function (note) {
+    var freq = sc.Scale.major().degreeToFreq(note, (60).midicps(), 1);
+    T("pluck", {freq:freq}).bang().play()
+
+    // var l = T("lag", {time:500}, T("pluck", {freq:freq2, mul:0.5}))
+    // t.bang().play()
+    // l.bang().play()
   }
 }
 
