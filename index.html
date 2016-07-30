@@ -1,5 +1,6 @@
 <script src="bower_components/timbre.js/timbre.dev.js"></script>
 <script src="bower_components/timbre.js/src/extras/keyboard.js"></script>
+<script src="vendor/subcollider.js"></script>
 <script>
   // T("sin", {freq:880, mul:0.5}).play()
 
@@ -81,7 +82,7 @@
 //   }
 // }).start();
 
-T("audio").load("/bower_components/timbre.js/misc/audio/drumkit.wav", function() {
+T("audio").load("/audio-dataset/bower_components/timbre.js/misc/audio/drumkit.wav", function() {
   var BD  = this.slice(   0,  500).set({bang:false});
   var SD  = this.slice( 500, 1000).set({bang:false});
   var HH1 = this.slice(1000, 1500).set({bang:false, mul:0.2});
