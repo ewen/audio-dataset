@@ -1,0 +1,24 @@
+{
+  "name": "audio-dataset",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ewen/audio-dataset.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ewen/audio-dataset/issues"
+  },
+  "homepage": "https://github.com/ewen/audio-dataset#readme",
+  "dependencies": {
+    "browserify-data": "^0.2.0",
+    "jquery": "^3.1.0",
+    "moment": "^2.14.1"
+  }
+}
